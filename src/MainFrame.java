@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -112,44 +113,26 @@ public class MainFrame extends JFrame{
         return nom;
     }
 
+    public void chiffrement(boolean isSimple, String fichierAChiffrer, String emplacementFichierChiffre, String emplacementCle) throws IOException, JSONException {
 
-    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException, JSONException, IOException {
-        //Permet d'avoir l'arrondi sur les boutons
-        UIManager.setLookAndFeel("com.jtattoo.plaf.aluminium.AluminiumLookAndFeel");
+        //Récupérer le fichier sous forme de byte
+        byte[] fichier = Files.readAllBytes(Paths.get(fichierAChiffrer));
 
-        String chemin = "C:\\Users\\cleme\\OneDrive\\Documents\\DBMS ex.planation.docx";
+        //
+        LFSRPourChiffrer lfsrPourChiffrer = new LFSRPourChiffrer(fichier);
 
-        byte[] file = Files.readAllBytes(Paths.get("C:\\Users\\cleme\\OneDrive\\Bureau\\Cours\\M1_info\\Semestre_2\\Codage_Et_Cryptographie\\Projet\\ProjetCrypto\\src\\Image\\test.txt"));
+        byte[] fichierCompresse = lfsrPourChiffrer.plusieursGraines();
 
+        int[] cle = lfsrPourChiffrer.getCle();
 
-        String fichier = getNomFichier(chemin);
+        System.out.println(java.util.Arrays.toString(fichier));
 
-        String extension = getExtensionFichier(fichier);
+        System.out.println(java.util.Arrays.toString(fichierCompresse));
 
-        String nomFichierSansExtension = getNomFichierSansExtension(fichier);
+        Files.write(Paths.get("C:\\Users\\cleme\\OneDrive\\Bureau\\Cours\\M1_info\\Semestre_2\\Codage_Et_Cryptographie\\Projet\\ProjetCrypto\\src\\Image\\test2.txt"), fichierCompresse);
 
-        System.out.println(fichier);
-        System.out.println(extension);
-        System.out.println(nomFichierSansExtension);
-
-
-        //String fichier = chemin.substring(chemin.lastIndexOf("/"));
-
-//        int taille = file.length;
-//        System.out.println(taille);
-//
-//        LFSRPourChiffrer lfsrPourChiffrer = new LFSRPourChiffrer(file);
-//
-//        byte[] fichierCompresse = lfsrPourChiffrer.plusieursGraines();
-//
-//        int[] cle = lfsrPourChiffrer.getCle();
-//
-//        System.out.println(java.util.Arrays.toString(file));
-//
-//        System.out.println(java.util.Arrays.toString(fichierCompresse));
-//
 //        Files.write(Paths.get("C:\\Users\\cleme\\OneDrive\\Bureau\\Cours\\M1_info\\Semestre_2\\Codage_Et_Cryptographie\\Projet\\ProjetCrypto\\src\\Image\\test2.txt"), fichierCompresse);
-//
+
 //        LFSRPourDechiffrer lfsrPourDechiffrer = new LFSRPourDechiffrer(fichierCompresse, cle);
 //
 //        byte[] fichierDecompresse = lfsrPourDechiffrer.dechiffrer();
@@ -157,6 +140,15 @@ public class MainFrame extends JFrame{
 //        System.out.println(java.util.Arrays.toString(fichierDecompresse));
 //
 //        Files.write(Paths.get("C:\\Users\\cleme\\OneDrive\\Bureau\\Cours\\M1_info\\Semestre_2\\Codage_Et_Cryptographie\\Projet\\ProjetCrypto\\src\\Image\\test3.txt"), fichierDecompresse);
+    }
+
+
+    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException, JSONException, IOException {
+        //Permet d'avoir l'arrondi sur les boutons
+        UIManager.setLookAndFeel("com.jtattoo.plaf.aluminium.AluminiumLookAndFeel");
+
+        String chemin = "C:\\Users\\cleme\\OneDrive\\Documents\\DBMS ex.planation.docx";
+
 
 
         //Ouvre le panel
@@ -209,7 +201,7 @@ public class MainFrame extends JFrame{
         chiffrerFrame.addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent e){
                 chiffrerFrame.dispose();
-                typeChiffrageFrame.setVisible(true);
+                mainFrame.setVisible(true);
             }
         });
 
@@ -222,12 +214,23 @@ public class MainFrame extends JFrame{
         // Appuie sur le bouton Valider
         chiffrerFrame.getBtValider().addActionListener(e1 -> {
             chiffrerFrame.dispose();
-            initialisationLoaderFrame(mainFrame, isSimple);
+            String fichierAChiffrer = chiffrerFrame.getTfLink1().getText();
+            String emplacementFichierChiffre = chiffrerFrame.getTfLink2().getText();
+            String emplacementCle = chiffrerFrame.getTfLink3().getText();
+
+            //Si les infos ne sont pas valide affichage d'une message dialog
+            if(Objects.equals(fichierAChiffrer, "C:\\") || Objects.equals(emplacementFichierChiffre, "C:\\") || Objects.equals(emplacementCle, "C:\\")){
+                JOptionPane.showMessageDialog( null, "Veuillez rentrer des informations valide","Erreur", JOptionPane.WARNING_MESSAGE);
+                chiffrerFrame.setVisible(true);
+            }else{
+                initialisationLoaderFrame(mainFrame, isSimple, fichierAChiffrer, emplacementFichierChiffre, emplacementCle);
+            }
+
 
         });
     }
 
-    public static void initialisationLoaderFrame(MainFrame mainFrame, boolean isSimple){
+    public static void initialisationLoaderFrame(MainFrame mainFrame, boolean isSimple, String fichierAChiffrer, String emplacementFichierChiffre, String emplacementCle){
 
         LoaderChiffrerFrame loaderChiffrerFrame = new LoaderChiffrerFrame();
 

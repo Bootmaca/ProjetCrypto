@@ -87,17 +87,6 @@ public class TypeChiffrageFrame extends JFrame{
 
     }
 
-
-    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException, JSONException, IOException {
-        //Permet d'avoir l'arrondi sur les boutons
-        UIManager.setLookAndFeel("com.jtattoo.plaf.aluminium.AluminiumLookAndFeel");
-
-        //Ouvre le panel
-        TypeChiffrageFrame typeChiffrageFrame = new TypeChiffrageFrame();
-        typeChiffrageFrame.setVisible(true);
-
-    }
-
     public JButton getBtSimple() {
         return BtSimple;
     }
