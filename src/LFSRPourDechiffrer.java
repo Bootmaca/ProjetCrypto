@@ -1,9 +1,9 @@
 public class LFSRPourDechiffrer {
     private final byte[] fichierChiffre;
-    private final int[] cle;
+    private final byte[] cle;
     private byte[] fichierDecompresse;
 
-    public LFSRPourDechiffrer(byte[] fichierChiffre, int[] cle){
+    public LFSRPourDechiffrer(byte[] fichierChiffre, byte[] cle){
         this.fichierChiffre = fichierChiffre;
         this.cle = cle;
         this.fichierDecompresse = new byte[fichierChiffre.length];

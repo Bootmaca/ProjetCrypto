@@ -2,13 +2,12 @@ import org.json.JSONException;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -113,7 +112,8 @@ public class MainFrame extends JFrame{
         return nom;
     }
 
-    public void chiffrement(boolean isSimple, String fichierAChiffrer, String emplacementFichierChiffre, String emplacementCle) throws IOException, JSONException {
+    public static void chiffrement(boolean isSimple, String fichierAChiffrer, String emplacementFichierChiffre, String emplacementCle) throws IOException, JSONException {
+
 
         //Récupérer le fichier sous forme de byte
         byte[] fichier = Files.readAllBytes(Paths.get(fichierAChiffrer));
@@ -121,34 +121,47 @@ public class MainFrame extends JFrame{
         //
         LFSRPourChiffrer lfsrPourChiffrer = new LFSRPourChiffrer(fichier);
 
-        byte[] fichierCompresse = lfsrPourChiffrer.plusieursGraines();
+        byte[] fichierChiffre;
 
-        int[] cle = lfsrPourChiffrer.getCle();
+        if(isSimple){
+            fichierChiffre = lfsrPourChiffrer.uneGraine();
+        }else{
+            fichierChiffre = lfsrPourChiffrer.plusieursGraines();
+        }
 
-        System.out.println(java.util.Arrays.toString(fichier));
 
-        System.out.println(java.util.Arrays.toString(fichierCompresse));
+        byte[] cle = lfsrPourChiffrer.getCle();
 
-        Files.write(Paths.get("C:\\Users\\cleme\\OneDrive\\Bureau\\Cours\\M1_info\\Semestre_2\\Codage_Et_Cryptographie\\Projet\\ProjetCrypto\\src\\Image\\test2.txt"), fichierCompresse);
+        String nomFichier = getNomFichier(fichierAChiffrer);
+        String nomSansExtension = getNomFichierSansExtension(nomFichier);
+        String extensionFichier = getExtensionFichier(nomFichier);
 
-//        Files.write(Paths.get("C:\\Users\\cleme\\OneDrive\\Bureau\\Cours\\M1_info\\Semestre_2\\Codage_Et_Cryptographie\\Projet\\ProjetCrypto\\src\\Image\\test2.txt"), fichierCompresse);
 
-//        LFSRPourDechiffrer lfsrPourDechiffrer = new LFSRPourDechiffrer(fichierCompresse, cle);
-//
-//        byte[] fichierDecompresse = lfsrPourDechiffrer.dechiffrer();
-//
-//        System.out.println(java.util.Arrays.toString(fichierDecompresse));
-//
-//        Files.write(Paths.get("C:\\Users\\cleme\\OneDrive\\Bureau\\Cours\\M1_info\\Semestre_2\\Codage_Et_Cryptographie\\Projet\\ProjetCrypto\\src\\Image\\test3.txt"), fichierDecompresse);
+        // Enregistrement du fichier chiffre dans le chemin spécifié
+        Path pathCompletFichierChiffre = Paths.get(emplacementFichierChiffre + "\\" + nomSansExtension + "(compresse)." + extensionFichier);
+        Files.write(pathCompletFichierChiffre, fichierChiffre);
+
+        // Enregistrement de la clé dans le chemin spécifié
+        Path pathCompletCle = Paths.get(emplacementCle + "\\cle" + nomSansExtension);
+        Files.write(pathCompletCle, cle);
+
+        byte[] recupFichierChiffre = Files.readAllBytes(pathCompletFichierChiffre);
+        byte[] recupCle = Files.readAllBytes(pathCompletCle);
+
+        LFSRPourDechiffrer lfsrPourDechiffrer = new LFSRPourDechiffrer(recupFichierChiffre, recupCle);
+
+        byte[] fichierDecompresse = lfsrPourDechiffrer.dechiffrer();
+
+        Path pathCompletFichierDeChiffre = Paths.get(emplacementFichierChiffre + "\\" + nomSansExtension + "(décompresse)." + extensionFichier);
+        Files.write(pathCompletFichierDeChiffre, fichierDecompresse);
     }
 
 
-    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException, JSONException, IOException {
+    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         //Permet d'avoir l'arrondi sur les boutons
         UIManager.setLookAndFeel("com.jtattoo.plaf.aluminium.AluminiumLookAndFeel");
 
-        String chemin = "C:\\Users\\cleme\\OneDrive\\Documents\\DBMS ex.planation.docx";
-
+        String chemin = "C:\\Users\\cleme\\OneDrive\\Documents\\test";
 
 
         //Ouvre le panel
@@ -156,9 +169,7 @@ public class MainFrame extends JFrame{
         mainFrame.setVisible(true);
 
         //Action sur le bouton chiffrer
-        mainFrame.BtChiffrer.addActionListener(e -> {
-            initialisationTypeChiffrageFrame(mainFrame);
-        });
+        mainFrame.BtChiffrer.addActionListener(e -> initialisationTypeChiffrageFrame(mainFrame));
 
 
     }
@@ -177,13 +188,11 @@ public class MainFrame extends JFrame{
             }
         });
 
-        typeChiffrageFrame.getBtSimple().addActionListener(e1 -> {
-            initialisationChiffrerFrame(typeChiffrageFrame, mainFrame, true);
-        });
+        //Lors du clic sur le bouton Simple
+        typeChiffrageFrame.getBtSimple().addActionListener(e1 -> initialisationChiffrerFrame(typeChiffrageFrame, mainFrame, true));
 
-        typeChiffrageFrame.getBtMultiple().addActionListener(e1 -> {
-            initialisationChiffrerFrame(typeChiffrageFrame, mainFrame, false);
-        });
+        //Lors du clic sur le bouton multiple
+        typeChiffrageFrame.getBtMultiple().addActionListener(e1 -> initialisationChiffrerFrame(typeChiffrageFrame, mainFrame, false));
 
         typeChiffrageFrame.getBtAnnuler().addActionListener(e1 -> {
             typeChiffrageFrame.dispose();
@@ -269,9 +278,12 @@ public class MainFrame extends JFrame{
         Thread t2 = new Thread(() -> {
             try {
                 t1.join();
+                chiffrement(isSimple, fichierAChiffrer,emplacementFichierChiffre,emplacementCle);
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
+            } catch (JSONException | IOException e) {
+                throw new RuntimeException(e);
             }
             LoaderChiffrerFrame.fin(loaderChiffrerFrame);
             loaderChiffrerFrame.removeWindowListener(windowAdapterFermerAvecConfirmation);

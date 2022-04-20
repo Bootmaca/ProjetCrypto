@@ -7,7 +7,7 @@ public class NombreAleatoire {
 
     public NombreAleatoire(){}
 
-    public int[] creerNombreAletoire(int tailleDemande, int tailleFichier) throws JSONException {
+    public byte[] creerNombreAletoire(int tailleDemande, int tailleFichier) throws JSONException {
 
         //Récupère la taille la plus petite au cas ou si le fichier est moin grand que la taille demandé
         int tailleMin = Math.min(tailleFichier, tailleDemande);
@@ -16,7 +16,7 @@ public class NombreAleatoire {
         int tailleMax = Math.max(tailleFichier, tailleDemande);
 
         //Créer d'un tableau d'entier en fonction de la taille du fichier
-        int[] tabInt = new int[tailleMax];
+        byte[] tabInt = new byte[tailleMax];
 
         int nbVille = tabDesVilles.length;
         StringBuilder chaineContainInt = new StringBuilder();
@@ -62,7 +62,7 @@ public class NombreAleatoire {
 
         //Pour i allant de 0 à la taille minimum récuperation du caratère numéro i de la chaine de caractère et mise dans le tableau à la place i
         for(int i =0; i<tailleMin; i++){
-            tabInt[i] = Integer.parseInt(String.valueOf(chaineContainInt.charAt(i)));
+            tabInt[i] = (byte) Integer.parseInt(String.valueOf(chaineContainInt.charAt(i)));
         }
 
         return tabInt;

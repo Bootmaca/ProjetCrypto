@@ -159,6 +159,12 @@ public class ChiffrerFrame extends JFrame{
         BtChoisir3.setForeground(Color.orange); //Change la couleur du texte en orange
         BtChoisir3.setFont(new Font("Consolas", Font.BOLD, 22)); // Change la police le style et met en gras
 
+        BtChoisir3.addActionListener(e -> {
+            String directoryname = TfLink3.getText();
+            String newDirectoryName = choisirUnDossier(directoryname);
+            TfLink3.setText(newDirectoryName);
+        });
+
         /**************************************** Panel PanelContainInput3 ****************************************/
         PanelContainInput3.setBackground(Color.black); // Change la couleur d'arrière plan en black
 
