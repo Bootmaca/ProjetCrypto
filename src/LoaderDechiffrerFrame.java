@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
-public class LoaderChiffrerFrame extends JFrame{
+public class LoaderDechiffrerFrame extends JFrame{
     private JPanel mainPanel;
     private JPanel PanelContainReste;
     public JLabel LTitre;
@@ -12,7 +12,8 @@ public class LoaderChiffrerFrame extends JFrame{
     private JLabel LImage;
 
 
-    public LoaderChiffrerFrame() {
+
+    public LoaderDechiffrerFrame() {
 
         /**************************************** MAIN PANEL ****************************************/
         setContentPane(mainPanel);
@@ -69,14 +70,15 @@ public class LoaderChiffrerFrame extends JFrame{
         BtValider.setFont(new Font("Consolas", Font.BOLD, 25)); // Change la police le style et met en gras
         BtValider.setEnabled(false);
 
-        Icon imgIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("Image/loader.gif")));
-        LImage.setIcon(imgIcon);
+        Icon iconLoader = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("Image/loader.gif")));
+        LImage.setIcon(iconLoader);
     }
 
     /**************************************** Fonction de fin du chargement ****************************************/
     public void fin() {
-        this.LTitre.setText("Chiffrement terminé !");
+        this.LTitre.setText("Déchiffrement terminé !");
         this.BtValider.setEnabled(true);
+        this.LImage.setIcon(null);
         Icon imgIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("Image/Valide5.png")));
         this.LImage.setIcon(imgIcon);
     }

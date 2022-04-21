@@ -114,46 +114,58 @@ public class MainFrame extends JFrame{
 
     public static void chiffrement(boolean isSimple, String fichierAChiffrer, String emplacementFichierChiffre, String emplacementCle) throws IOException, JSONException {
 
-
         //Récupérer le fichier sous forme de byte
         byte[] fichier = Files.readAllBytes(Paths.get(fichierAChiffrer));
 
-        //
+        //Chiffrement du fichier sélectionné selon la méthode choisis
         LFSRPourChiffrer lfsrPourChiffrer = new LFSRPourChiffrer(fichier);
-
         byte[] fichierChiffre;
-
         if(isSimple){
             fichierChiffre = lfsrPourChiffrer.uneGraine();
         }else{
             fichierChiffre = lfsrPourChiffrer.plusieursGraines();
         }
 
-
+        // Récupération de la clé
         byte[] cle = lfsrPourChiffrer.getCle();
 
+        // Récupération du nom et de l'extension du fichier à chiffrer
         String nomFichier = getNomFichier(fichierAChiffrer);
         String nomSansExtension = getNomFichierSansExtension(nomFichier);
         String extensionFichier = getExtensionFichier(nomFichier);
 
-
         // Enregistrement du fichier chiffre dans le chemin spécifié
-        Path pathCompletFichierChiffre = Paths.get(emplacementFichierChiffre + "\\" + nomSansExtension + "(compresse)." + extensionFichier);
+        Path pathCompletFichierChiffre = Paths.get(emplacementFichierChiffre + "\\" + nomSansExtension + "(chiffré)." + extensionFichier);
         Files.write(pathCompletFichierChiffre, fichierChiffre);
 
         // Enregistrement de la clé dans le chemin spécifié
         Path pathCompletCle = Paths.get(emplacementCle + "\\cle" + nomSansExtension);
         Files.write(pathCompletCle, cle);
+    }
 
-        byte[] recupFichierChiffre = Files.readAllBytes(pathCompletFichierChiffre);
-        byte[] recupCle = Files.readAllBytes(pathCompletCle);
+    public static void dechiffrement(String fichierADechiffrer, String emplacementFichierDechiffre, String fichierCle) throws IOException {
 
-        LFSRPourDechiffrer lfsrPourDechiffrer = new LFSRPourDechiffrer(recupFichierChiffre, recupCle);
+        //Récupération du nom et de l'extension du fichier
+        String nomFichierChiffre = getNomFichier(fichierADechiffrer);
+        String nomSansExtension = getNomFichierSansExtension(nomFichierChiffre);
+        String extensionFichier = getExtensionFichier(nomFichierChiffre);
 
-        byte[] fichierDecompresse = lfsrPourDechiffrer.dechiffrer();
+        // Un fichier chiffré contient "(chiffré)" dans son nom on va donc l'enlever
+        String nomSansExtensionEtSansChiffre = nomSansExtension.replaceAll("[(chiffré)]", "");
 
-        Path pathCompletFichierDeChiffre = Paths.get(emplacementFichierChiffre + "\\" + nomSansExtension + "(décompresse)." + extensionFichier);
-        Files.write(pathCompletFichierDeChiffre, fichierDecompresse);
+        // Récupérer le fichier chiffré sous forme de byte
+        byte[] fichierChiffre = Files.readAllBytes(Paths.get(fichierADechiffrer));
+
+        // Récupération de la clé sous forme de byte
+        byte[] recupCle = Files.readAllBytes(Paths.get(fichierCle));
+
+        // Déchiffrement du fichier
+        LFSRPourDechiffrer lfsrPourDechiffrer = new LFSRPourDechiffrer(fichierChiffre, recupCle);
+        byte[] fichierDechiffre = lfsrPourDechiffrer.dechiffrer();
+
+        //Enregistrement de ce fichier dans l'emplacement indiqué
+        Path pathCompletFichierDeChiffre = Paths.get(emplacementFichierDechiffre + "\\" + nomSansExtensionEtSansChiffre + "(déchiffré)." + extensionFichier);
+        Files.write(pathCompletFichierDeChiffre, fichierDechiffre);
     }
 
 
@@ -161,8 +173,7 @@ public class MainFrame extends JFrame{
         //Permet d'avoir l'arrondi sur les boutons
         UIManager.setLookAndFeel("com.jtattoo.plaf.aluminium.AluminiumLookAndFeel");
 
-        String chemin = "C:\\Users\\cleme\\OneDrive\\Documents\\test";
-
+        String chemin = "C:\\Users\\cleme\\OneDrive\\Documents\\test(chiffré)";
 
         //Ouvre le panel
         MainFrame mainFrame = new MainFrame();
@@ -170,6 +181,8 @@ public class MainFrame extends JFrame{
 
         //Action sur le bouton chiffrer
         mainFrame.BtChiffrer.addActionListener(e -> initialisationTypeChiffrageFrame(mainFrame));
+
+        mainFrame.BtDechiffrer.addActionListener(e -> initialisationDechiffrerFrame(mainFrame));
 
 
     }
@@ -222,7 +235,7 @@ public class MainFrame extends JFrame{
 
         // Appuie sur le bouton Valider
         chiffrerFrame.getBtValider().addActionListener(e1 -> {
-            chiffrerFrame.dispose();
+            chiffrerFrame.setVisible(false);
             String fichierAChiffrer = chiffrerFrame.getTfLink1().getText();
             String emplacementFichierChiffre = chiffrerFrame.getTfLink2().getText();
             String emplacementCle = chiffrerFrame.getTfLink3().getText();
@@ -232,14 +245,14 @@ public class MainFrame extends JFrame{
                 JOptionPane.showMessageDialog( null, "Veuillez rentrer des informations valide","Erreur", JOptionPane.WARNING_MESSAGE);
                 chiffrerFrame.setVisible(true);
             }else{
-                initialisationLoaderFrame(mainFrame, isSimple, fichierAChiffrer, emplacementFichierChiffre, emplacementCle);
+                initialisationLoaderChiffrerFrame(mainFrame, isSimple, fichierAChiffrer, emplacementFichierChiffre, emplacementCle);
             }
 
 
         });
     }
 
-    public static void initialisationLoaderFrame(MainFrame mainFrame, boolean isSimple, String fichierAChiffrer, String emplacementFichierChiffre, String emplacementCle){
+    public static void initialisationLoaderChiffrerFrame(MainFrame mainFrame, boolean isSimple, String fichierAChiffrer, String emplacementFichierChiffre, String emplacementCle){
 
         LoaderChiffrerFrame loaderChiffrerFrame = new LoaderChiffrerFrame();
 
@@ -285,7 +298,7 @@ public class MainFrame extends JFrame{
             } catch (JSONException | IOException e) {
                 throw new RuntimeException(e);
             }
-            LoaderChiffrerFrame.fin(loaderChiffrerFrame);
+            loaderChiffrerFrame.fin();
             loaderChiffrerFrame.removeWindowListener(windowAdapterFermerAvecConfirmation);
             loaderChiffrerFrame.addWindowListener(windowAdapterFermerSansConfirmation);
         });
@@ -300,6 +313,106 @@ public class MainFrame extends JFrame{
     }
 
 
+
+
+    public static void initialisationDechiffrerFrame(MainFrame mainFrame){
+        DechiffrerFrame dechiffrerFrame = new DechiffrerFrame();
+        dechiffrerFrame.setVisible(true);
+        mainFrame.setVisible(false);
+
+        //Fermeture de l'appli chiffrer frame
+        dechiffrerFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        dechiffrerFrame.addWindowListener(new WindowAdapter(){
+            public void windowClosing(WindowEvent e){
+                dechiffrerFrame.dispose();
+                mainFrame.setVisible(true);
+            }
+        });
+
+        // Appuie sur le bouton Annuler
+        dechiffrerFrame.getBtAnnuler().addActionListener(e12 -> {
+            dechiffrerFrame.dispose();
+            mainFrame.setVisible(true);
+        });
+
+        // Appuie sur le bouton Valider
+        dechiffrerFrame.getBtValider().addActionListener(e1 -> {
+            dechiffrerFrame.setVisible(false);
+            String fichierADechiffrer = dechiffrerFrame.getTfLink1().getText();
+            String emplacementFichierDechiffre = dechiffrerFrame.getTfLink2().getText();
+            String fichiercle = dechiffrerFrame.getTfLink3().getText();
+
+            //Si les infos ne sont pas valide affichage d'une message dialog
+            if(Objects.equals(fichierADechiffrer, "C:\\") || Objects.equals(emplacementFichierDechiffre, "C:\\") || Objects.equals(fichiercle, "C:\\")){
+                JOptionPane.showMessageDialog( null, "Veuillez rentrer des informations valide","Erreur", JOptionPane.WARNING_MESSAGE);
+                dechiffrerFrame.setVisible(true);
+            }else{
+                initialisationLoaderDechiffreFrame(mainFrame, fichierADechiffrer, emplacementFichierDechiffre, fichiercle);
+            }
+
+
+        });
+    }
+
+    public static void initialisationLoaderDechiffreFrame(MainFrame mainFrame, String fichierADechiffrer, String emplacementFichierDechiffre, String fichiercle){
+
+        LoaderDechiffrerFrame loaderDechiffrerFrame = new LoaderDechiffrerFrame();
+
+        //Lors de la fermeture de la Frame demandé la confirmation avant de la fermet et d'afficher la main frame
+        WindowAdapter windowAdapterFermerAvecConfirmation = new WindowAdapter(){
+            public void windowClosing(WindowEvent e){
+                int reponse = JOptionPane.showConfirmDialog(loaderDechiffrerFrame,
+                        "Voulez-vous vraiment quitter l'application? \n Cela annulera le chiffrement en cours",
+                        "Confirmation",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE);
+                if (reponse==JOptionPane.YES_OPTION){
+                    loaderDechiffrerFrame.dispose();
+                    mainFrame.setVisible(true);
+                }
+            }
+        };
+
+        //Lors de la fermeture de la Frame la ferme et affiche la mainFrame
+        WindowAdapter windowAdapterFermerSansConfirmation = new WindowAdapter(){
+            public void windowClosing(WindowEvent e){
+                loaderDechiffrerFrame.dispose();
+                mainFrame.setVisible(true);
+            }
+        };
+
+
+        Thread t1 = new Thread(() -> {
+            loaderDechiffrerFrame.setVisible(true);
+            loaderDechiffrerFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            loaderDechiffrerFrame.addWindowListener(windowAdapterFermerAvecConfirmation);
+        });
+
+        t1.start();
+
+        Thread t2 = new Thread(() -> {
+            try {
+                t1.join();
+                dechiffrement(fichierADechiffrer,emplacementFichierDechiffre,fichiercle);
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            loaderDechiffrerFrame.fin();
+            loaderDechiffrerFrame.removeWindowListener(windowAdapterFermerAvecConfirmation);
+            loaderDechiffrerFrame.addWindowListener(windowAdapterFermerSansConfirmation);
+        });
+
+        t2.start();
+
+        // Appuye sur le bouton Valider
+        loaderDechiffrerFrame.getBtValider().addActionListener(e11 -> {
+            loaderDechiffrerFrame.dispose();
+            mainFrame.setVisible(true);
+        });
+    }
 
 
 }
