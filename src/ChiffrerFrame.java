@@ -103,7 +103,6 @@ public class ChiffrerFrame extends JFrame{
         PanelContainInput1.setBackground(Color.black); // Change la couleur d'arrière plan en black
 
         /**************************************** TextField TfLink1 ****************************************/
-        //TfLink1.setEnabled(false); // Change la couleur d'arrière plan en black
         TfLink1.setText("C:\\");
         TfLink1.setFont(new Font("Consolas", Font.BOLD, 18));
         TfLink1.setForeground(Color.black);
@@ -137,9 +136,9 @@ public class ChiffrerFrame extends JFrame{
         PanelContainInput2.setBackground(Color.black); // Change la couleur d'arrière plan en black
 
         /**************************************** TextField TfLink2 ****************************************/
-        TfLink2.setEditable(false);
         TfLink2.setText("C:\\");
         TfLink2.setFont(new Font("Consolas", Font.BOLD, 18));
+        TfLink2.setForeground(Color.black);
 
         /**************************************** Panel PanelContainPartieFichAChiffrer ****************************************/
         PanelContainPartieEmplacementFichCleSecrete.setBackground(Color.black); // Change la couleur d'arrière plan en black
@@ -169,10 +168,9 @@ public class ChiffrerFrame extends JFrame{
         PanelContainInput3.setBackground(Color.black); // Change la couleur d'arrière plan en black
 
         /**************************************** TextField TfLink3 ****************************************/
-        TfLink3.setEnabled(false); // Change la couleur d'arrière plan en black
         TfLink3.setText("C:\\");
         TfLink3.setFont(new Font("Consolas", Font.BOLD, 18));
-        TfLink3.setForeground(Color.white);
+        TfLink3.setForeground(Color.black);
 
         /**************************************** Panel PanelBtValiderEtAnnuler ****************************************/
         PanelBtValiderEtAnnuler.setBackground(Color.black); // Change la couleur d'arrière plan en black

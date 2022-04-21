@@ -151,7 +151,7 @@ public class MainFrame extends JFrame{
         String extensionFichier = getExtensionFichier(nomFichierChiffre);
 
         // Un fichier chiffré contient "(chiffré)" dans son nom on va donc l'enlever
-        String nomSansExtensionEtSansChiffre = nomSansExtension.replaceAll("[(chiffré)]", "");
+        String nomSansExtensionEtSansChiffre = nomSansExtension.replaceAll("\\(chiffré\\)", "");
 
         // Récupérer le fichier chiffré sous forme de byte
         byte[] fichierChiffre = Files.readAllBytes(Paths.get(fichierADechiffrer));
@@ -175,11 +175,12 @@ public class MainFrame extends JFrame{
 
         String chemin = "C:\\Users\\cleme\\OneDrive\\Documents\\test(chiffré)";
 
+
         //Ouvre le panel
         MainFrame mainFrame = new MainFrame();
         mainFrame.setVisible(true);
 
-        //Action sur le bouton chiffrer
+        // Action sur le bouton chiffrer
         mainFrame.BtChiffrer.addActionListener(e -> initialisationTypeChiffrageFrame(mainFrame));
 
         mainFrame.BtDechiffrer.addActionListener(e -> initialisationDechiffrerFrame(mainFrame));
