@@ -196,13 +196,13 @@ public class ChiffrerFrame extends JFrame{
 
         //Création et ouverture d'un fileChooser
         JFileChooser jc = new JFileChooser();
-        //jc.setCurrentDirectory(new File("C:\\"));//Change le répertoire de base
         int isChooseFichier = jc.showOpenDialog(this);
 
         //Si un fichier à été choisi
         if(isChooseFichier != 1){
             filenameChoose = jc.getSelectedFile().getAbsolutePath(); //Stock le dossier choisis dans la variable qui sera retourné
         }
+
         return filenameChoose;
     }
 

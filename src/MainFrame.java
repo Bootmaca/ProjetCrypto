@@ -83,7 +83,7 @@ public class MainFrame extends JFrame{
         PanelContainBt.setBackground(Color.black); // Change la couleur d'arrière plan en black
 
 
-        /**************************************** Panel PanelContainBt ****************************************/
+        /**************************************** Panel PanelContainTitre ****************************************/
         PanelContainTitre.setBackground(Color.black); // Change la couleur d'arrière plan en black
 
     }
@@ -114,10 +114,10 @@ public class MainFrame extends JFrame{
 
     public static void chiffrement(boolean isSimple, String fichierAChiffrer, String emplacementFichierChiffre, String emplacementCle) throws IOException, JSONException {
 
-        //Récupérer le fichier sous forme de byte
+        // Récupérer le fichier sous forme de byte
         byte[] fichier = Files.readAllBytes(Paths.get(fichierAChiffrer));
 
-        //Chiffrement du fichier sélectionné selon la méthode choisis
+        // Chiffrement du fichier sélectionné selon la méthode choisis
         LFSRPourChiffrer lfsrPourChiffrer = new LFSRPourChiffrer(fichier);
         byte[] fichierChiffre;
         if(isSimple){
@@ -145,7 +145,7 @@ public class MainFrame extends JFrame{
 
     public static void dechiffrement(String fichierADechiffrer, String emplacementFichierDechiffre, String fichierCle) throws IOException {
 
-        //Récupération du nom et de l'extension du fichier
+        // Récupération du nom et de l'extension du fichier
         String nomFichierChiffre = getNomFichier(fichierADechiffrer);
         String nomSansExtension = getNomFichierSansExtension(nomFichierChiffre);
         String extensionFichier = getExtensionFichier(nomFichierChiffre);
@@ -163,85 +163,99 @@ public class MainFrame extends JFrame{
         LFSRPourDechiffrer lfsrPourDechiffrer = new LFSRPourDechiffrer(fichierChiffre, recupCle);
         byte[] fichierDechiffre = lfsrPourDechiffrer.dechiffrer();
 
-        //Enregistrement de ce fichier dans l'emplacement indiqué
+        // Enregistrement de ce fichier dans l'emplacement indiqué
         Path pathCompletFichierDeChiffre = Paths.get(emplacementFichierDechiffre + "\\" + nomSansExtensionEtSansChiffre + "(déchiffré)." + extensionFichier);
         Files.write(pathCompletFichierDeChiffre, fichierDechiffre);
     }
 
 
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-        //Permet d'avoir l'arrondi sur les boutons
+        // Permet d'avoir l'arrondi sur les boutons
         UIManager.setLookAndFeel("com.jtattoo.plaf.aluminium.AluminiumLookAndFeel");
 
         String chemin = "C:\\Users\\cleme\\OneDrive\\Documents\\test(chiffré)";
 
 
-        //Ouvre le panel
+        // Ouvre le panel
         MainFrame mainFrame = new MainFrame();
         mainFrame.setVisible(true);
 
-        // Action sur le bouton chiffrer
+        // Action lors du clic sur le bouton Chiffrer
         mainFrame.BtChiffrer.addActionListener(e -> initialisationTypeChiffrageFrame(mainFrame));
 
+        // Action lors du clic sur le bouton Déchiffrer
         mainFrame.BtDechiffrer.addActionListener(e -> initialisationDechiffrerFrame(mainFrame));
 
 
     }
 
     public static void initialisationTypeChiffrageFrame(MainFrame mainFrame){
+
+        // Création et ouverture de la frame TypeChiffrageFrame
         TypeChiffrageFrame typeChiffrageFrame = new TypeChiffrageFrame();
         typeChiffrageFrame.setVisible(true);
+
+        // Rendre invisible la frame mainFrame
         mainFrame.setVisible(false);
 
-        //Fermeture de l'appli chiffrer frame
+        // Action lors du clic sur la croix en haut à droite
         typeChiffrageFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         typeChiffrageFrame.addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent e){
-                typeChiffrageFrame.dispose();
-                mainFrame.setVisible(true);
+                typeChiffrageFrame.dispose();// Fermeture de la frame actuel
+                mainFrame.setVisible(true);// Rendre visible la frame mainFrame
             }
         });
 
-        //Lors du clic sur le bouton Simple
+        // Actions lors du clic sur le bouton Simple
         typeChiffrageFrame.getBtSimple().addActionListener(e1 -> initialisationChiffrerFrame(typeChiffrageFrame, mainFrame, true));
 
-        //Lors du clic sur le bouton multiple
+        // Action lors du clic sur le bouton Multiple
         typeChiffrageFrame.getBtMultiple().addActionListener(e1 -> initialisationChiffrerFrame(typeChiffrageFrame, mainFrame, false));
 
+        //Action lors du clic sur le bouton Annuler
         typeChiffrageFrame.getBtAnnuler().addActionListener(e1 -> {
-            typeChiffrageFrame.dispose();
-            mainFrame.setVisible(true);
+            typeChiffrageFrame.dispose();// Fermeture de la frame actuel
+            mainFrame.setVisible(true);// Rendre visible la frame mainFrame
         });
     }
 
     public static void initialisationChiffrerFrame(TypeChiffrageFrame typeChiffrageFrame, MainFrame mainFrame, boolean isSimple){
+
+        // Création et ouverture de la frame ChiffrerFrame
         ChiffrerFrame chiffrerFrame = new ChiffrerFrame();
         chiffrerFrame.setVisible(true);
+
+        // Rendre invisible la frame typeChiffrageFrame
         typeChiffrageFrame.setVisible(false);
 
-        //Fermeture de l'appli chiffrer frame
+        // Action lors du clic sur la croix en haut à droite
         chiffrerFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         chiffrerFrame.addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent e){
-                chiffrerFrame.dispose();
-                mainFrame.setVisible(true);
+                chiffrerFrame.dispose();// Fermeture de la frame actuel
+                mainFrame.setVisible(true);// Rendre visible la frame mainFrame
             }
         });
 
-        // Appuie sur le bouton Annuler
+        // Action lors du clic sur le bouton Annuler
         chiffrerFrame.getBtAnnuler().addActionListener(e12 -> {
-            chiffrerFrame.dispose();
-            typeChiffrageFrame.setVisible(true);
+            chiffrerFrame.dispose();// Fermeture de la frame actuel
+            typeChiffrageFrame.setVisible(true);// Rendre visible la frame mainFrame
         });
 
-        // Appuie sur le bouton Valider
+        // Action lors du clic sur le bouton Valider
         chiffrerFrame.getBtValider().addActionListener(e1 -> {
+
+            // Rends invisible la frame actuel
             chiffrerFrame.setVisible(false);
+
+            // Récupération des informations contenue dans les textFiels
             String fichierAChiffrer = chiffrerFrame.getTfLink1().getText();
             String emplacementFichierChiffre = chiffrerFrame.getTfLink2().getText();
             String emplacementCle = chiffrerFrame.getTfLink3().getText();
 
-            //Si les infos ne sont pas valide affichage d'une message dialog
+            // Si les infos ne sont pas valide affichage d'un message dialog
             if(Objects.equals(fichierAChiffrer, "C:\\") || Objects.equals(emplacementFichierChiffre, "C:\\") || Objects.equals(emplacementCle, "C:\\")){
                 JOptionPane.showMessageDialog( null, "Veuillez rentrer des informations valide","Erreur", JOptionPane.WARNING_MESSAGE);
                 chiffrerFrame.setVisible(true);
@@ -249,15 +263,15 @@ public class MainFrame extends JFrame{
                 initialisationLoaderChiffrerFrame(mainFrame, isSimple, fichierAChiffrer, emplacementFichierChiffre, emplacementCle);
             }
 
-
         });
     }
 
     public static void initialisationLoaderChiffrerFrame(MainFrame mainFrame, boolean isSimple, String fichierAChiffrer, String emplacementFichierChiffre, String emplacementCle){
 
+        // Création de la frame LoaderChiffrerFrame
         LoaderChiffrerFrame loaderChiffrerFrame = new LoaderChiffrerFrame();
 
-        //Lors de la fermeture de la Frame demande la confirmation avant de la fermet et d'afficher la main frame
+        // Lors de la fermeture de la Frame demande la confirmation avant de la fermet et d'afficher la main frame
         WindowAdapter windowAdapterFermerAvecConfirmation = new WindowAdapter(){
             public void windowClosing(WindowEvent e){
                 int reponse = JOptionPane.showConfirmDialog(loaderChiffrerFrame,
@@ -272,7 +286,7 @@ public class MainFrame extends JFrame{
             }
         };
 
-        //Lors de la fermeture de la Frame la ferme et affiche la mainFrame
+        // Lors de la fermeture de la Frame la ferme et affiche la mainFrame
         WindowAdapter windowAdapterFermerSansConfirmation = new WindowAdapter(){
             public void windowClosing(WindowEvent e){
                 loaderChiffrerFrame.dispose();
@@ -281,6 +295,7 @@ public class MainFrame extends JFrame{
         };
 
 
+        // Premier Thread permettant de rendre visible la frame
         Thread t1 = new Thread(() -> {
             loaderChiffrerFrame.setVisible(true);
             loaderChiffrerFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -289,6 +304,7 @@ public class MainFrame extends JFrame{
 
         t1.start();
 
+        // Deuxième Thread permettant de réaliser le chiffrage
         Thread t2 = new Thread(() -> {
             try {
                 t1.join();
@@ -315,13 +331,16 @@ public class MainFrame extends JFrame{
 
 
 
-
     public static void initialisationDechiffrerFrame(MainFrame mainFrame){
+
+        // Création et ouverture de la frame ChiffrerFrame
         DechiffrerFrame dechiffrerFrame = new DechiffrerFrame();
         dechiffrerFrame.setVisible(true);
+
+        // Rendre invisible la frame mainFrame
         mainFrame.setVisible(false);
 
-        //Fermeture de l'appli chiffrer frame
+        // Fermeture de l'appli chiffrer frame
         dechiffrerFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         dechiffrerFrame.addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent e){
@@ -338,12 +357,16 @@ public class MainFrame extends JFrame{
 
         // Appuie sur le bouton Valider
         dechiffrerFrame.getBtValider().addActionListener(e1 -> {
+
+            // Rends invisible la frame actuel
             dechiffrerFrame.setVisible(false);
+
+            // Récupération des informations contenue dans les textFiels
             String fichierADechiffrer = dechiffrerFrame.getTfLink1().getText();
             String emplacementFichierDechiffre = dechiffrerFrame.getTfLink2().getText();
             String fichiercle = dechiffrerFrame.getTfLink3().getText();
 
-            //Si les infos ne sont pas valide affichage d'une message dialog
+            // Si les infos ne sont pas valide affichage d'un message dialog
             if(Objects.equals(fichierADechiffrer, "C:\\") || Objects.equals(emplacementFichierDechiffre, "C:\\") || Objects.equals(fichiercle, "C:\\")){
                 JOptionPane.showMessageDialog( null, "Veuillez rentrer des informations valide","Erreur", JOptionPane.WARNING_MESSAGE);
                 dechiffrerFrame.setVisible(true);
@@ -359,7 +382,7 @@ public class MainFrame extends JFrame{
 
         LoaderDechiffrerFrame loaderDechiffrerFrame = new LoaderDechiffrerFrame();
 
-        //Lors de la fermeture de la Frame demandé la confirmation avant de la fermet et d'afficher la main frame
+        // Lors de la fermeture de la Frame demandé la confirmation avant de la fermet et d'afficher la main frame
         WindowAdapter windowAdapterFermerAvecConfirmation = new WindowAdapter(){
             public void windowClosing(WindowEvent e){
                 int reponse = JOptionPane.showConfirmDialog(loaderDechiffrerFrame,
@@ -374,7 +397,7 @@ public class MainFrame extends JFrame{
             }
         };
 
-        //Lors de la fermeture de la Frame la ferme et affiche la mainFrame
+        // Lors de la fermeture de la Frame la ferme et affiche la mainFrame
         WindowAdapter windowAdapterFermerSansConfirmation = new WindowAdapter(){
             public void windowClosing(WindowEvent e){
                 loaderDechiffrerFrame.dispose();
@@ -383,6 +406,7 @@ public class MainFrame extends JFrame{
         };
 
 
+        // Premier Thread permettant de rendre visible la frame
         Thread t1 = new Thread(() -> {
             loaderDechiffrerFrame.setVisible(true);
             loaderDechiffrerFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -391,6 +415,7 @@ public class MainFrame extends JFrame{
 
         t1.start();
 
+        // Deuxième Thread permettant de réaliser le déchiffrage
         Thread t2 = new Thread(() -> {
             try {
                 t1.join();
