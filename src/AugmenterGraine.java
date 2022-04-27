@@ -13,7 +13,7 @@ public class AugmenterGraine {
     public void augmenterGraine(){
         byte bitARajouterALaFin = 0;
 
-        //Pour tous les filtres on fait un xor avec les bit correspondant à la taille de la graine moins le filtre
+        //Pour tous les filtres, on fait un xor avec les bit correspondant à la taille de la graine moins le filtre
         for (int filtre : filtres) {
             bitARajouterALaFin = (byte) (bitARajouterALaFin ^ graine[(longueurGraine) - filtre]);
         }

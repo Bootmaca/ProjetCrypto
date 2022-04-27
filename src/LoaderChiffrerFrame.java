@@ -40,10 +40,10 @@ public class LoaderChiffrerFrame extends JFrame{
         Image icon = Toolkit.getDefaultToolkit().getImage("src/Image/cryptographie3.jpg");
         setIconImage(icon);
 
-        // Empêche la redimension du panel
+        // Empêche la re-dimension du panel
         setResizable(false);
 
-        // Change la couleur d'arrière plan en black
+        // Change la couleur d'arrière-plan en black
         mainPanel.setBackground(Color.black);
 
 
@@ -52,19 +52,19 @@ public class LoaderChiffrerFrame extends JFrame{
         LTitre.setForeground(Color.white); // Change La couleur du texte
 
         /**************************************** Panel PanelContainTitre ****************************************/
-        PanelContainTitre.setBackground(Color.black); // Change la couleur d'arrière plan en black
+        PanelContainTitre.setBackground(Color.black); // Change la couleur d'arrière-plan en black
 
         /**************************************** Panel PanelContainReste ****************************************/
-        PanelContainReste.setBackground(Color.black); // Change la couleur d'arrière plan en black
+        PanelContainReste.setBackground(Color.black); // Change la couleur d'arrière-plan en black
         PanelContainReste.setBorder(BorderFactory.createEmptyBorder(0, 0,50,0));
 
         /**************************************** Panel PanelBtValider ****************************************/
-        PanelBtValider.setBackground(Color.black); // Change la couleur d'arrière plan en black
+        PanelBtValider.setBackground(Color.black); // Change la couleur d'arrière-plan en black
         PanelBtValider.setBorder(BorderFactory.createEmptyBorder(0, 0,30,0));
 
         /**************************************** Bouton BtValider ****************************************/
         BtValider.setFocusPainted(false); // Empêche le focus auto
-        BtValider.setBackground(Color.black); // Change la couleur d'arrière plan en black
+        BtValider.setBackground(Color.black); // Change la couleur d'arrière-plan en black
         BtValider.setForeground(Color.green); //Change la couleur du texte en orange
         BtValider.setFont(new Font("Consolas", Font.BOLD, 25)); // Change la police le style et met en gras
         BtValider.setEnabled(false);
@@ -81,7 +81,7 @@ public class LoaderChiffrerFrame extends JFrame{
         this.LImage.setIcon(imgIcon);
     }
 
-    /**************************************** Getteur BtValider ****************************************/
+    /**************************************** Getter BtValider ****************************************/
     public JButton getBtValider() {
         return BtValider;
     }

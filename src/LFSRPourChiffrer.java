@@ -1,5 +1,3 @@
-import org.json.JSONException;
-
 public class LFSRPourChiffrer {
     private final byte[] fichier;
     private byte[] fichierChiffre;
@@ -11,14 +9,20 @@ public class LFSRPourChiffrer {
     }
 
     //Chiffrage basique
-    public byte[] uneGraine() throws JSONException {
+    public byte[] uneGraine() {
 
         //Création de l'objet permettant de créer des bits de manière aléatoire
         NombreAleatoire nombreAleatoire = new NombreAleatoire();
 
-        // Création des premier bit de la graine de manière aléatoire
+        // Création des premiers bit de la graine de manière aléatoire
         int longueurDepartXn = 16;
-        byte[] xn = nombreAleatoire.creerNombreAletoire(longueurDepartXn, this.fichier.length);
+
+        byte[] xn;
+
+        xn = nombreAleatoire.creerNombreAleatoire(longueurDepartXn, this.fichier.length);
+
+
+
 
         // Création de l'objet permettant d'augmenter la graine pour constituer la clé secrète
         AugmenterGraine augmenterXn = new AugmenterGraine(xn, new int[]{5, 6, 8, 16}, longueurDepartXn);
@@ -34,7 +38,7 @@ public class LFSRPourChiffrer {
             //Récupération du bit du fichier
             bitFichier = this.fichier[i];
 
-            //Récupération de la longueur actuel de la graine
+            //Récupération de la longueur actuelle de la graine
             longueurGraine = augmenterXn.getLongueurGraine();
 
             // Si la longueur de la graine est moin grande que le bit qu'on veut récupérer
@@ -56,25 +60,25 @@ public class LFSRPourChiffrer {
 
 
     // Chiffrage multiple
-    public byte[] plusieursGraines() throws JSONException {
+    public byte[] plusieursGraines() {
 
         this.cle = new byte[fichier.length];
 
         //Création de l'objet permettant de créer des bits de manière aléatoire
         NombreAleatoire nombreAleatoire = new NombreAleatoire();
 
-        // Création des premier bit des graines de manière aléatoire
+        // Création des premiers bit des graines de manière aléatoire
         int longueurDepartVn = 25;
-        byte[] vn = nombreAleatoire.creerNombreAletoire(longueurDepartVn, this.fichier.length);
+        byte[] vn = nombreAleatoire.creerNombreAleatoire(longueurDepartVn, this.fichier.length);
 
         int longueurDepartXn = 31;
-        byte[] xn = nombreAleatoire.creerNombreAletoire(longueurDepartXn, this.fichier.length);
+        byte[] xn = nombreAleatoire.creerNombreAleatoire(longueurDepartXn, this.fichier.length);
 
         int longueurDepartYn = 33;
-        byte[] yn = nombreAleatoire.creerNombreAletoire(longueurDepartYn, this.fichier.length);
+        byte[] yn = nombreAleatoire.creerNombreAleatoire(longueurDepartYn, this.fichier.length);
 
         int longueurDepartZn = 39;
-        byte[] zn = nombreAleatoire.creerNombreAletoire(longueurDepartZn, this.fichier.length);
+        byte[] zn = nombreAleatoire.creerNombreAleatoire(longueurDepartZn, this.fichier.length);
 
         // Création des objets permettant d'augmenter les graines pour constituer les clés secrète
         AugmenterGraine augmenterVn = new AugmenterGraine(vn, new int[]{5, 13, 17, 25}, longueurDepartVn);
@@ -106,7 +110,7 @@ public class LFSRPourChiffrer {
             longueurGraineYn = augmenterYn.getLongueurGraine();
             longueurGraineZn = augmenterZn.getLongueurGraine();
 
-            // Si la longueur d'une des graine est moin grande grande que le bit qu'on veut récupérer on augmente la graine d'un bit
+            // Si la longueur d'une des graines est moin grande que le bit qu'on veut récupérer on augmente la graine d'un bit
             if(longueurGraineZn-1 < i){
                 augmenterVn.augmenterGraine();
                 augmenterXn.augmenterGraine();

@@ -20,7 +20,7 @@ public class JsonReader {
 
     }
 
-    //Recupération d'un fichier json en fonction d'une url
+    //Recuperation d'un fichier json en fonction d'une url
     public JSONObject readJsonFromUrl(String link) {
         try (InputStream input = new URL(link).openStream()) {
             BufferedReader re = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));

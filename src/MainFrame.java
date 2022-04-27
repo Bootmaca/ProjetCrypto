@@ -50,13 +50,13 @@ public class MainFrame extends JFrame{
         Image icon = Toolkit.getDefaultToolkit().getImage("src/Image/cryptographie3.jpg");
         setIconImage(icon);
 
-        // Permet de quitter l'applis quand on appuye sur la croix
+        // Permet de quitter l'appli quand on appuie sur la croix
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        // Empêche la redimension du panel
+        // Empêche la re-dimension du panel
         setResizable(false);
 
-        // Change la couleur d'arrière plan en black
+        // Change la couleur d'arrière-plan en black
         mainPanel.setBackground(Color.black);
 
 
@@ -67,24 +67,24 @@ public class MainFrame extends JFrame{
 
         /**************************************** Bouton BtChiffrer ****************************************/
         BtChiffrer.setFocusPainted(false); // Empêche le focus auto
-        BtChiffrer.setBackground(Color.black); // Change la couleur d'arrière plan en black
+        BtChiffrer.setBackground(Color.black); // Change la couleur d'arrière-plan en black
         BtChiffrer.setForeground(Color.orange); //Change la couleur du texte en orange
         BtChiffrer.setFont(new Font("Consolas", Font.BOLD, 45)); // Change la police le style et met en gras
 
 
         /**************************************** Bouton BtDechiffrer ****************************************/
         BtDechiffrer.setFocusPainted(false); //Empêche le focus auto
-        BtDechiffrer.setBackground(Color.black); // Change la couleur d'arrière plan en black
+        BtDechiffrer.setBackground(Color.black); // Change la couleur d'arrière-plan en black
         BtDechiffrer.setForeground(Color.orange); //Change la couleur du texte en orange
         BtDechiffrer.setFont(new Font("Consolas", Font.BOLD, 45)); // Change la police le style et met en gras
 
 
         /**************************************** Panel PanelContainBt ****************************************/
-        PanelContainBt.setBackground(Color.black); // Change la couleur d'arrière plan en black
+        PanelContainBt.setBackground(Color.black); // Change la couleur d'arrière-plan en black
 
 
         /**************************************** Panel PanelContainTitre ****************************************/
-        PanelContainTitre.setBackground(Color.black); // Change la couleur d'arrière plan en black
+        PanelContainTitre.setBackground(Color.black); // Change la couleur d'arrière-plan en black
 
     }
 
@@ -172,9 +172,6 @@ public class MainFrame extends JFrame{
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         // Permet d'avoir l'arrondi sur les boutons
         UIManager.setLookAndFeel("com.jtattoo.plaf.aluminium.AluminiumLookAndFeel");
-
-        String chemin = "C:\\Users\\cleme\\OneDrive\\Documents\\test(chiffré)";
-
 
         // Ouvre le panel
         MainFrame mainFrame = new MainFrame();
@@ -271,7 +268,7 @@ public class MainFrame extends JFrame{
         // Création de la frame LoaderChiffrerFrame
         LoaderChiffrerFrame loaderChiffrerFrame = new LoaderChiffrerFrame();
 
-        // Lors de la fermeture de la Frame demande la confirmation avant de la fermet et d'afficher la main frame
+        // Lors de la fermeture de la Frame demande la confirmation avant de la fermer et d'afficher la main frame
         WindowAdapter windowAdapterFermerAvecConfirmation = new WindowAdapter(){
             public void windowClosing(WindowEvent e){
                 int reponse = JOptionPane.showConfirmDialog(loaderChiffrerFrame,
@@ -322,7 +319,7 @@ public class MainFrame extends JFrame{
 
         t2.start();
 
-        // Appuye sur le bouton Valider
+        // Appuie sur le bouton Valider
         loaderChiffrerFrame.getBtValider().addActionListener(e11 -> {
             loaderChiffrerFrame.dispose();
             mainFrame.setVisible(true);
@@ -382,7 +379,7 @@ public class MainFrame extends JFrame{
 
         LoaderDechiffrerFrame loaderDechiffrerFrame = new LoaderDechiffrerFrame();
 
-        // Lors de la fermeture de la Frame demandé la confirmation avant de la fermet et d'afficher la main frame
+        // Lors de la fermeture de la Frame demandé la confirmation avant de la fermer et d'afficher la main frame
         WindowAdapter windowAdapterFermerAvecConfirmation = new WindowAdapter(){
             public void windowClosing(WindowEvent e){
                 int reponse = JOptionPane.showConfirmDialog(loaderDechiffrerFrame,
@@ -433,7 +430,7 @@ public class MainFrame extends JFrame{
 
         t2.start();
 
-        // Appuye sur le bouton Valider
+        // Appuie sur le bouton Valider
         loaderDechiffrerFrame.getBtValider().addActionListener(e11 -> {
             loaderDechiffrerFrame.dispose();
             mainFrame.setVisible(true);
