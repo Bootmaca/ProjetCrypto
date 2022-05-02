@@ -1,5 +1,3 @@
-import org.json.JSONException;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -112,7 +110,7 @@ public class MainFrame extends JFrame{
         return nom;
     }
 
-    public static void chiffrement(boolean isSimple, String fichierAChiffrer, String emplacementFichierChiffre, String emplacementCle) throws IOException, JSONException {
+    public static void chiffrement(boolean isSimple, String fichierAChiffrer, String emplacementFichierChiffre, String emplacementCle) throws IOException {
 
         // Récupérer le fichier sous forme de byte
         byte[] fichier = Files.readAllBytes(Paths.get(fichierAChiffrer));
@@ -134,12 +132,13 @@ public class MainFrame extends JFrame{
         String nomSansExtension = getNomFichierSansExtension(nomFichier);
         String extensionFichier = getExtensionFichier(nomFichier);
 
+        //System.out.println(emplacementFichierChiffre);
         // Enregistrement du fichier chiffre dans le chemin spécifié
-        Path pathCompletFichierChiffre = Paths.get(emplacementFichierChiffre + "\\" + nomSansExtension + "(chiffré)." + extensionFichier);
+        Path pathCompletFichierChiffre = Paths.get(emplacementFichierChiffre + "/" + nomSansExtension + "(chiffré)." + extensionFichier);
         Files.write(pathCompletFichierChiffre, fichierChiffre);
 
         // Enregistrement de la clé dans le chemin spécifié
-        Path pathCompletCle = Paths.get(emplacementCle + "\\cle" + nomSansExtension);
+        Path pathCompletCle = Paths.get(emplacementCle + "/cle" + nomSansExtension);
         Files.write(pathCompletCle, cle);
     }
 
@@ -164,7 +163,7 @@ public class MainFrame extends JFrame{
         byte[] fichierDechiffre = lfsrPourDechiffrer.dechiffrer();
 
         // Enregistrement de ce fichier dans l'emplacement indiqué
-        Path pathCompletFichierDeChiffre = Paths.get(emplacementFichierDechiffre + "\\" + nomSansExtensionEtSansChiffre + "(déchiffré)." + extensionFichier);
+        Path pathCompletFichierDeChiffre = Paths.get(emplacementFichierDechiffre + "/" + nomSansExtensionEtSansChiffre + "(déchiffré)." + extensionFichier);
         Files.write(pathCompletFichierDeChiffre, fichierDechiffre);
     }
 
@@ -309,7 +308,7 @@ public class MainFrame extends JFrame{
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
-            } catch (JSONException | IOException e) {
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
             loaderChiffrerFrame.fin();

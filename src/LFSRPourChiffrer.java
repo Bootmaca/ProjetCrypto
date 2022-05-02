@@ -21,9 +21,6 @@ public class LFSRPourChiffrer {
 
         xn = nombreAleatoire.creerNombreAleatoire(longueurDepartXn, this.fichier.length);
 
-
-
-
         // Création de l'objet permettant d'augmenter la graine pour constituer la clé secrète
         AugmenterGraine augmenterXn = new AugmenterGraine(xn, new int[]{5, 6, 8, 16}, longueurDepartXn);
 
